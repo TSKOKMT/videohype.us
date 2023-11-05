@@ -21,11 +21,14 @@
     <script>
         var framerate = 50;
 
-        var speedsX = [];
-        var speedsY = [];
-
         var width = document.documentElement.clientWidth;
         var height = document.documentElement.clientHeight;
+
+        var time;
+
+        var speedsX = [];
+        var speedsY = [];
+        var maxSpeed = 48;
 
         function loop() {
             var previousWidth = width;
@@ -33,8 +36,9 @@
             width = document.documentElement.clientWidth;
             height = document.documentElement.clientHeight;
 
+            var previousTime = time;
             let date = new Date();
-            var time = date.getTime() / 1000;
+            time = date.getTime() / 1000;
 
             var unit = Math.sqrt(width * height) / 120;
 
@@ -56,8 +60,8 @@
                     newImage.style.left = randomR(0, width - imageWidth) + 'px';
                     newImage.style.top = randomR(0, height - imageHeight) + 'px';
                     document.body.appendChild(newImage);
-                    speedsX.push(randomR(-1, 1));
-                    speedsY.push(randomR(-1, 1));
+                    speedsX.push(randomR(-maxSpeed, maxSpeed));
+                    speedsY.push(randomR(-maxSpeed, maxSpeed));
                 }
             }
 
@@ -68,13 +72,14 @@
                 var left = parseFloat(image.style.left.replace('px', ''));
                 var top = parseFloat(image.style.top.replace('px', ''));
                 
+                //Replace
                 if (width != previousWidth || height != previousHeight) {
                     left = map(left, 0, previousWidth - previousImageWidth, 0, width - imageWidth);
                     top = map(top, 0, previousHeight - previousImageHeight, 0, height - imageHeight);
                 }
 
-                left += speedsX[i] * unit;
-                top += speedsY[i] * unit;
+                left += speedsX[i] * (time - previousTime) * unit;
+                top += speedsY[i] * (time - previousTime) * unit;
                 if (speedsX[i] > 0 && left > width - imageWidth) speedsX[i] *= -1;
                 if (speedsY[i] > 0 && top > height - imageHeight) speedsY[i] *= -1;
                 if (speedsX[i] < 0 && left < 0) speedsX[i] *= -1;
