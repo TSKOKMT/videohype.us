@@ -30,6 +30,8 @@
         var speedsY = [];
         var maxSpeed = 48;
 
+        var indexes = [];
+
         function loop() {
             var previousWidth = width;
             var previousHeight = height;
@@ -53,7 +55,7 @@
 
             //Create
             if (document.getElementsByTagName('img').length == 0) {
-                for (var i = 0; i < 100; i++) {
+                for (var i = 0; i < 12; i++) {
                     const newImage = document.createElement('img');
                     newImage.src = 'Logotype.png';
                     newImage.style.width = imageWidth + 'px';
@@ -62,6 +64,7 @@
                     document.body.appendChild(newImage);
                     speedsX.push(randomR(-maxSpeed, maxSpeed));
                     speedsY.push(randomR(-maxSpeed, maxSpeed));
+                    indexes.push(0);
                 }
             }
 
@@ -80,14 +83,21 @@
 
                 left += speedsX[i] * (time - previousTime) * unit;
                 top += speedsY[i] * (time - previousTime) * unit;
-                if (speedsX[i] > 0 && left > width - imageWidth) speedsX[i] *= -1;
-                if (speedsY[i] > 0 && top > height - imageHeight) speedsY[i] *= -1;
-                if (speedsX[i] < 0 && left < 0) speedsX[i] *= -1;
-                if (speedsY[i] < 0 && top < 0) speedsY[i] *= -1;
+                if ((speedsX[i] > 0 && left > width - imageWidth) || (speedsX[i] < 0 && left < 0)) {
+                    speedsX[i] *= -1;
+                    indexes[i]++;
+                }
+                if ((speedsY[i] > 0 && top > height - imageHeight) || (speedsY[i] < 0 && top < 0)) {
+                    speedsY[i] *= -1;
+                    indexes[i]++;
+                }
                 
+                if (Math.max(Math.abs(speedsX[i]), Math.abs(speedsY[i])) > maxSpeed * 0.75) image.src = 'Logotype.png';
+                else image.src = 'Logotype Mono.png';
                 image.style.left = left + 'px';
                 image.style.top = top + 'px';
                 image.style.width = imageWidth + 'px';
+                image.src = indexes[i] % 6 + '.png';
             }
         }
 
