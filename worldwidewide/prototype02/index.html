@@ -29,7 +29,8 @@
         var speedsX = [];
         var speedsY = [];
         var maxSpeed = 30;
-        var count = 100;
+        var count = 256;
+        var path = 'boy.gif';
 
         var indexes = [];
 
@@ -46,7 +47,7 @@
             var unit = Math.sqrt(width * height) / 120;
 
             const imageObject = new Image();
-            imageObject.src = 'boy.gif';
+            imageObject.src = path;
             var imageWidth = 18 * unit;
             var imageHeight = imageWidth / (imageObject.width / imageObject.height);
 
@@ -58,7 +59,7 @@
             if (document.getElementsByTagName('img').length == 0) {
                 for (var i = 0; i < count; i++) {
                     const newImage = document.createElement('img');
-                    newImage.src = 'boy.gif';
+                    newImage.src = path;
                     newImage.style.width = imageWidth + 'px';
                     newImage.style.left = randomR(0, width - imageWidth) + 'px';
                     newImage.style.top = randomR(0, height - imageHeight) + 'px';
