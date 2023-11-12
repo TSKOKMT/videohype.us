@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>VIDEO HYPE</title>
+        <link rel="icon" type="image/x-icon" href="favicon.png">
+    </head>
+    <body>
+    </body>
+
+    <style>
+        body {
+            margin: 0px;
+            background: magenta;
+        }
+        img {
+            position: absolute;
+            transform: translate(-50%,-50%);
+        }
+    </style>
+
+    <script>
+        var framerate = 50;
+
+        var width = document.documentElement.clientWidth;
+        var height = document.documentElement.clientHeight;
+
+        var time;
+
+        var speedsX = [];
+        var speedsY = [];
+        var maxSpeed = 30;
+        var path = 'boy.gif';
+
+        var indexes = [];
+
+        function loop() {
+            var previousWidth = width;
+            var previousHeight = height;
+            width = document.documentElement.clientWidth;
+            height = document.documentElement.clientHeight;
+
+            var previousTime = time;
+            let date = new Date();
+            time = date.getTime() / 1000;
+
+            var unit = Math.sqrt(width * height) / 120;
+
+            var countH = Math.round(width / (24 * unit));
+            var countV = Math.round(height / (24 * unit));
+
+            const imageObject = new Image();
+            imageObject.src = path;
+            var imageAspect = imageObject.width / imageObject.height;
+
+            var previousUnit = Math.sqrt(previousWidth * previousHeight) / 120;
+            var previousImageWidth = imageWidth * (previousUnit / unit);
+            var previousImageHeight = imageHeight * (previousUnit / unit);
+
+            //Create
+            const images2 = document.getElementsByTagName('img');
+            if (images2.length != countH * countV) {
+                var length = images2.length;
+                for (var i = 0; i < length; i++) {
+                    images2[0].remove();
+                }
+                for (var i = 0; i < countH * countV; i++) {
+                    const newImage = document.createElement('img');
+                    newImage.src = path;
+                    newImage.style.width = imageWidth + 'px';
+                    newImage.style.left = randomR(0, width - imageWidth) + 'px';
+                    newImage.style.top = randomR(0, height - imageHeight) + 'px';
+                    document.body.appendChild(newImage);
+                    speedsX.push(randomR(-maxSpeed, maxSpeed));
+                    speedsY.push(randomR(-maxSpeed, maxSpeed));
+                    indexes.push(0);
+                }
+            }
+
+            //Move
+            const images = document.getElementsByTagName('img');
+            var i = 0;
+            for (var v = 0; v < countV; v++) {
+                for (var h = 0; h < countH; h++) {
+                    var image = images[i];
+
+                    var imageWidth = ((v * h * 15 + 15) % 27 + 3) * unit;
+                    var imageHeight = imageWidth / imageAspect;
+                    
+                    //Replace
+                    var left = (h + .5) * (width / countH);
+                    var top = (v + .5) * (height / countV);
+                    
+                    image.style.left = left + 'px';
+                    image.style.top = top + 'px';
+                    image.style.width = imageWidth + 'px';
+
+                    i++;
+                }
+            }
+        }
+
+        window.setInterval(loop, 1000 / framerate);
+
+        function randomR(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+        function map(value, low1, high1, low2, high2) {
+            return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
+        }
+    </script>
+</html>
