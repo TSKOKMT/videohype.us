@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>VIDEO HYPE : World Wide Wide</title>
+        <link rel="icon" type="image/x-icon" href="favicon.png">
+    </head>
+    <body>
+    </body>
+
+    <style>
+        body {
+            margin: 0px;
+            background: magenta;
+        }
+        img {
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%,-50%);
+        }
+    </style>
+
+    <script>
+        var framerate = 50;
+
+        var width = document.documentElement.clientWidth;
+        var height = document.documentElement.clientHeight;
+
+        var time;
+
+        var count = 5;
+
+        var w = 75;
+
+        function loop() {
+            width = document.documentElement.clientWidth;
+            height = document.documentElement.clientHeight;
+
+            let date = new Date();
+            time = date.getTime() / 1000;
+
+            var unit = Math.sqrt(width * height) / 120;
+
+            var interval = 60 * unit;
+
+            var scrollLeft = document.getElementsByTagName('html')[0].scrollLeft;
+            var scrollTop = document.getElementsByTagName('html')[0].scrollTop;
+
+            const imageObject = new Image();
+            imageObject.src = 'Logotype.png';
+            var aspect = imageObject.width / imageObject.height;
+            var imageWidth = w * unit;
+
+            //Create
+            if (document.getElementsByTagName('img').length == 0) {
+                for (var i = 0; i < count * count; i++) {
+                    const newImage = document.createElement('img');
+                    newImage.src = 'Logotype.png';
+                    document.body.appendChild(newImage);
+                }
+            }
+            document.getElementsByTagName('html')[0].scrollLeft = interval * 2.5 - width * .5;
+            document.getElementsByTagName('html')[0].scrollTop = interval * 2.5 - height * .5;
+
+            //Update
+            const images = document.getElementsByTagName('img');
+            var i = 0;
+            for (var v = 0; v < count; v++) {
+                for (var h = 0; h < count; h++) {
+                    var image = images[i];
+                    image.style.left = (h + .5) * interval + 'px';
+                    image.style.top = (v + .5) * interval + 'px';
+                    image.style.width = imageWidth + 'px';
+                    image.style.transform = 'translate(-50%,-50%) rotate(' + (scrollTop / interval - scrollLeft / interval) * Math.PI + 'rad)';
+
+                    i++;
+                }
+            }
+        }
+
+        window.setInterval(loop, 1000 / framerate);
+    </script>
+</html>
