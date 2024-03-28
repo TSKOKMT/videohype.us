@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>VIDEO HYPE</title>
+        <link rel="icon" type="image/x-icon" href="favicon.png">
+    </head>
+    <body>
+        <p>VIDEO HYPE : World Wide Wideは、若い世代の2人のアーティスト 岡本斗志貴と中川慎之介による、世界規模に広がるインターネット網をメディアに使用したアートプロジェクトです。<br><br>SICF25では、大規模な作品構想のスタート地点として、Webサイトの作品を発表します。<br><br>私たちは、この作品を通じて、インターネットを介した新たなつながりや遊び、コミュニケーションを楽しむ空間を提供することを目指しています。私たちはiPhoneがまだ存在しなかった時代の最後の世代であり、インターネットが冒険のような楽しさに満ちていた時代を知っています。ハイパーリンクで色々な場所に飛び回り、様々な情報と出会い、他者の存在を感じることができた時代です。 <br><br>しかし現在のインターネットは、個々の興味に合わせてカスタマイズされたコンテンツで満ちており、巨大なテック企業によって支配されています。しかし、私たちはインターネットを広大な広場として捉え、人々が自由に交流し、創造的な活動を行う場として復活させたいと考えています。このWeb作品では、90年代から00年代の、ワクワクするインターネットを取り巻くカルチャーを現代人に再提示し、Webサイト内で自由に探検する楽しさや共同体験を提供します。<br><br>この体験型のWeb作品の中を、実際に多くの人にサーフィンしてもらうことで、インターネットが本来持つ可能性、自由と創造性を再評価し、現代の資本主義と承認欲求によって歪められつつある現状を見つめ直すきっかけとなることを願っています。</p>
+    </body>
+
+    <style>
+        body {
+            background-color: white;
+        }
+        p {
+            font-family: Arial, Helvetica, sans-serif;
+            line-height: 100%;
+            font-weight: bold;
+            font-size: 30px;
+            color: magenta;
+            transform: scale(0.75, 1);
+        }
+    </style>
+
+<script>
+    var framerate = 50;
+
+    function loop() {
+        var width = document.documentElement.clientWidth;
+        var height = document.documentElement.clientHeight;
+
+        var unit = Math.sqrt(height * width) / 120;
+
+        //Remove
+        const ps = document.getElementsByTagName('p');
+        for (var i = 0; i < ps.length; i++) {
+            ps[i].style.fontSize = 3.5 * unit + 'px';
+        }
+    }
+
+    window.setInterval(loop, 1000 / framerate);
+</script>
+</html>
