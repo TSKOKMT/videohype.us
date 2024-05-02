@@ -11,11 +11,24 @@
                 height: 100vh;
                 margin: 0;
                 overflow: hidden;
-                background-color: #f0f0f0;
+                font-family: Arial, sans-serif;
+                font-size: 14px;
+                line-height: 75%;
+                letter-spacing: -0.14em;
             }
 
             .random-div {
                 position: absolute;
+                word-wrap: break-word;
+                overflow: hidden;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            p {
+                margin: 14px;
+                text-align: center;
             }
         </style>
     </head>
@@ -23,6 +36,9 @@
     <body>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
+                var frameWidth = document.documentElement.clientWidth;
+                var frameHeight = document.documentElement.clientHeight;
+
                 const container = document.body;
                 const numOfDivs = 30;
                 const minWidth = 20;
@@ -58,6 +74,18 @@
                     }
                     return false;
                 }
+
+                function isInside(testDiv, parentDiv) {
+                    if (testDiv.left + testDiv.width < parentDiv.left + parentDiv.width &&
+                        parentDiv.left < testDiv.left &&
+                        testDiv.top + testDiv.height < parentDiv.top + parentDiv.height &&
+                        parentDiv.top < testDiv.top) {
+                        return true;
+                    }
+                    return false;
+                }
+
+                const containerDiv = { left: 0, top: 0, width: frameWidth, height: frameHeight };
 
                 for (let i = 0; i < numOfDivs; i++) {
                     let top;
@@ -97,14 +125,14 @@
                                     break;
                             }
                         } else {
-                            top = Math.random() * (window.innerHeight - height);
-                            left = Math.random() * (window.innerWidth - width);
+                            left = Math.random() * (frameWidth - width);
+                            top = Math.random() * (frameHeight - height);
                         }
 
                         newDivP = { top, left, width, height };
 
                         loopCount++;
-                    } while (loopCount < maxLoopCount && divs.length > 0 && isOverlapping(newDivP, divs));
+                    } while (loopCount < maxLoopCount && divs.length > 0 && isOverlapping(newDivP, divs) && isInside(newDivP, containerDiv));
 
                     const newDiv = document.createElement('div');
                     newDiv.classList.add('random-div');
@@ -119,8 +147,13 @@
                     newDiv.style.height = `${height}px`;
                     container.appendChild(newDiv);
 
+                    const newP = document.createElement('p');
+                    newP.innerText = 'W o r l d \xa0 W i d e \xa0 W i d e';
+                    //newP.style.color = colors[i % colors.length];
+                    newDiv.appendChild(newP);
+
                     // 位置とサイズの保持
-                    divs.push({ top, left, width, height });
+                    divs.push(newDivP);
                 }
             });
         </script>
