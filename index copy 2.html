@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>VIDEO HYPE</title>
+        <link rel="icon" type="image/x-icon" href="favicon.png">
+    </head>
+    <body>
+        <div></div>
+    </body>
+
+    <style>
+        div {
+            position: absolute;
+            margin: 0px;
+            padding: 0px;
+            left: 0px;
+            top: 0px;
+            border: 15px solid magenta;
+        }
+        button {
+            position: absolute;
+            width: 360px;
+            height: 60px;
+            font-size: 30px;
+        }
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+
+    <script>
+        var width;
+        var height;
+        var time;
+        var unit;
+
+        //LOAD
+        window.addEventListener('load', function() {
+            updateFT();
+
+            //Create first div
+            const theDiv = document.getElementsByTagName('div')[0];
+            theDiv.style.width = width + 'px';
+            theDiv.style.height = height + 'px';
+            theDiv.style.border = '0px';
+
+            const newDivs = splitDiv(theDiv);
+
+            newDivs = splitDiv(newDivs[3]);
+
+            splitDiv(newDivs[3]);
+
+            /*const divs = document.getElementsByTagName('div');
+            for (var i = 1; i < divs.length; i++) {
+                var img = document.createElement('img');
+                img.src = 'images/' + i % 14 + '.gif';
+                divs[i].appendChild(img);
+            }*/
+        });
+
+        //LOOP
+        function loop() {
+            updateFT();
+
+            requestAnimationFrame(loop);
+        }
+
+        requestAnimationFrame(loop);
+
+
+        function updateFT() {
+            width = document.documentElement.clientWidth;
+            height = document.documentElement.clientHeight;
+
+            let date = new Date();
+            time = date.getTime() / 1000;
+
+            unit = Math.sqrt(height * width) / 120;
+        }
+
+        function splitDiv(originalDiv) {
+            //Border width
+            var borderWidth = 1;
+            var widthB = width - 2 * borderWidth;
+            var heightB = height - 2 * borderWidth;
+
+            // 親要素を取得
+            const parent = originalDiv.parentNode;
+
+            // 親要素のサイズを取得
+            const parentWidth = originalDiv.offsetWidth;
+            const parentHeight = originalDiv.offsetHeight;
+
+            // 新しいdiv要素を格納する配列
+            const newDivs = [];
+
+            //Prepare
+            const xs = [];
+            const ys = [];
+            const widthes = [];
+            const heights = [];
+            xs.push(0);
+            ys.push(0);
+            widthes.push(parentWidth);
+            heights.push(parentHeight);
+            for (var i = 0; i < 3; i++) {
+                var xsLength = xs.length;
+                for (var j = 0; j < xsLength; j++) {
+                    //var ratio = (Math.sin(time * (1 + (i * j) / 18) + i + j) + 1) * 0.3 + 0.2;
+                    /*var ratio = Math.random();
+                    ratio = ratio * 0.6 + 0.2;*/
+                    //var ratio = (Math.sin(Math.floor(time / 2) * 100 * (1 + (i * j) / 18) + i + j) + 1) * 0.3 + 0.2;
+                    var ratio = randomR(0.2, 0.8);
+
+                    //Horizontal
+                    if (i % 2 == 0) {
+                        xs.push(xs[j] + widthes[j] * ratio);
+                        ys.push(ys[j]);
+                        widthes.push(widthes[j] * (1 - ratio));
+                        heights.push(heights[j]);
+
+                        widthes[j] *= ratio;
+                    }
+                    //Vertical
+                    else {
+                        xs.push(xs[j]);
+                        ys.push(ys[j] + heights[j] * ratio);
+                        widthes.push(widthes[j]);
+                        heights.push(heights[j] * (1 - ratio));
+
+                        heights[j] *= ratio;
+                    }
+                }
+            }
+
+            //Create
+            for (var i = 0; i < xs.length; i++) {
+                const newDiv = document.createElement('div');
+                originalDiv.appendChild(newDiv);
+
+                newDiv.style.borderWidth = borderWidth + 'px';
+                newDiv.style.left = xs[i] + 'px';
+                newDiv.style.top = ys[i] + 'px';
+                newDiv.style.width = widthes[i] - 2 * borderWidth + 'px';
+                newDiv.style.height = heights[i] - 2 * borderWidth + 'px';
+
+                newDiv.style.backgroundColor = randomColorBySeed(i);
+
+                var img = document.createElement('img');
+                img.src = 'images/' + i % 14 + '.gif';
+                newDiv.appendChild(img);
+
+                newDivs.push(newDiv);
+            }
+
+            // 新しいdivの配列を返す
+            return newDivs;
+        }
+
+        function randomR(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+        class LinearCongruentialGenerator {
+            constructor(seed) {
+                this.modulus = 0x1000000; // 16777216, 使用する色の範囲 (0から16777215)
+                this.multiplier = 1664525;
+                this.increment = 1013904223;
+                this.seed = seed % this.modulus;
+            }
+            next() {
+                this.seed = (this.seed * this.multiplier + this.increment) % this.modulus;
+                return this.seed;
+            }
+            nextColor() {
+                const color = this.next();
+                return `#${color.toString(16).padStart(6, '0')}`;
+            }
+        }
+
+        function randomColorBySeed(seed) {
+            const generator = new LinearCongruentialGenerator(seed);
+            return generator.nextColor();
+        }
+    </script>
+</html>

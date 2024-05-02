@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Maximum Offset Touching Divs</title>
+        <style>
+            body {
+                position: relative;
+                width: 100vw;
+                height: 100vh;
+                margin: 0;
+                overflow: hidden;
+                background-color: #f0f0f0;
+            }
+
+            .random-div {
+                position: absolute;
+            }
+        </style>
+    </head>
+
+    <body>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const container = document.body;
+                const numOfDivs = 30;
+                const minWidth = 20;
+                const maxWidth = 400;
+                const minHeight = 20;
+                const maxHeight = 400;
+                const divs = [];
+                const colors = [];
+
+                function getRandomColor() {
+                    const r = Math.floor(Math.random() * 256);
+                    const g = Math.floor(Math.random() * 256);
+                    const b = Math.floor(Math.random() * 256);
+                    return `rgb(${r},${g},${b})`;
+                }
+
+                for (let i = 0; i < 3; i++) {
+                    colors.push(getRandomColor());
+                }
+
+                function randomR(min, max) {
+                    return Math.random() * (max - min) + min;
+                }
+
+                function isOverlapping(testDiv, others) {
+                    for (let other of others) {
+                        if (other.left < testDiv.left + testDiv.width &&
+                            testDiv.left < other.left + other.width &&
+                            other.top < testDiv.top + testDiv.height &&
+                            testDiv.top < other.top + other.height) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+
+                for (let i = 0; i < numOfDivs; i++) {
+                    let top;
+                    let left;
+                    let width;
+                    let height;
+
+                    let loopCount = 0;
+                    const maxLoopCount = 10000;
+
+                    let newDivP;
+                    do {
+                        // ランダムなサイズ
+                        width = randomR(minWidth, maxWidth);
+                        height = randomR(minHeight, maxHeight);
+
+                        //ランダムな位置
+                        if (divs.length > 0) {
+                            const lastDiv = divs[divs.length - 1];
+                            const side = Math.floor(Math.random() * 4); // 0: 上, 1: 右, 2: 下, 3: 左
+                            switch (side) {
+                                case 0: // 上に配置
+                                    top = lastDiv.top - height;
+                                    left = lastDiv.left + Math.random() * lastDiv.width - width * Math.random();
+                                    break;
+                                case 1: // 右に配置
+                                    top = lastDiv.top + Math.random() * lastDiv.height - height * Math.random();
+                                    left = lastDiv.left + lastDiv.width;
+                                    break;
+                                case 2: // 下に配置
+                                    top = lastDiv.top + lastDiv.height;
+                                    left = lastDiv.left + Math.random() * lastDiv.width - width * Math.random();
+                                    break;
+                                case 3: // 左に配置
+                                    top = lastDiv.top + Math.random() * lastDiv.height - height * Math.random();
+                                    left = lastDiv.left - width;
+                                    break;
+                            }
+                        } else {
+                            top = Math.random() * (window.innerHeight - height);
+                            left = Math.random() * (window.innerWidth - width);
+                        }
+
+                        newDivP = { top, left, width, height };
+
+                        loopCount++;
+                    } while (loopCount < maxLoopCount && divs.length > 0 && isOverlapping(newDivP, divs));
+
+                    const newDiv = document.createElement('div');
+                    newDiv.classList.add('random-div');
+
+                    // ランダムな色
+                    newDiv.style.backgroundColor = colors[i % colors.length];
+
+                    // 位置とサイズの適用
+                    newDiv.style.top = `${top}px`;
+                    newDiv.style.left = `${left}px`;
+                    newDiv.style.width = `${width}px`;
+                    newDiv.style.height = `${height}px`;
+                    container.appendChild(newDiv);
+
+                    // 位置とサイズの保持
+                    divs.push({ top, left, width, height });
+                }
+            });
+        </script>
+    </body>
+
+</html>

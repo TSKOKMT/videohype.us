@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Random Divs</title>
+    <style>
+        .random-div {
+            position: absolute;
+            background-color: rgba(0, 0, 255, 0.5); /* 半透明の青 */
+            overflow: hidden; /* はみ出した画像を隠す */
+        }
+        .random-div img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* 画像を<div>にフィットさせる */
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // ページが完全にロードされた後に関数を実行
+        window.onload = function() {
+            var width = document.documentElement.clientWidth;
+            var height = document.documentElement.clientHeight;
+            
+            const numberOfDivs = 50; // 生成する<div>の数
+
+            for (let i = 0; i < numberOfDivs; i++) {
+                const div = document.createElement('div');
+                div.classList.add('random-div');
+
+                // ランダムな位置とサイズを設定
+                const maxWidth = window.innerWidth - 50; // 最大幅（ウィンドウ幅より小さい）
+                const maxHeight = window.innerHeight - 50; // 最大高さ（ウィンドウ高さより小さい）
+                const randomWidth = Math.random() * 150 + 50; // 50pxから150pxのランダムな幅
+                const randomHeight = Math.random() * 150 + 50; // 50pxから150pxのランダムな高さ
+                const randomX = Math.random() * (maxWidth - randomWidth); // 横位置
+                const randomY = Math.random() * (maxHeight - randomHeight); // 縦位置
+
+                // スタイル設定
+                div.style.width = `${randomWidth}px`;
+                div.style.height = `${randomHeight}px`;
+                div.style.left = `${randomX}px`;
+                div.style.top = `${randomY}px`;
+
+                // 画像要素の作成
+                const img = document.createElement('img');
+                img.src = 'https://scrapbox.io/files/662f4c202f473b0024cc36b7.gif'; // 画像URLを設定
+                div.appendChild(img); // 画像をdivに追加
+
+                // body要素に追加
+                document.body.appendChild(div);
+            }
+        };
+    </script>
+</body>
+</html>
