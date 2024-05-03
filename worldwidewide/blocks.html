@@ -12,7 +12,7 @@
                 margin: 0;
                 overflow: hidden;
                 font-family: Arial, sans-serif;
-                font-size: 20px;
+                font-size: 30px;
                 line-height: 75%;
                 letter-spacing: -0.14em;
             }
@@ -29,6 +29,13 @@
             p {
                 margin: 15px;
                 text-align: center;
+            }
+
+            a {
+                position: absolute;
+                display: block;
+                width: 100%;
+                height: 100%;
             }
         </style>
     </head>
@@ -151,6 +158,10 @@
                     newP.innerText = 'W o r l d \xa0 W i d e \xa0 W i d e';
                     //newP.style.color = colors[i % colors.length];
                     newDiv.appendChild(newP);
+
+                    var a = document.createElement("a");
+                    a.href = "https://www.example.com";
+                    newDiv.appendChild(a);
 
                     // 位置とサイズの保持
                     divs.push(newDivP);
